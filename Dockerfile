@@ -35,7 +35,7 @@ RUN export PATH=$PATH:/usr/bin && git clone https://github.com/joyent/node.git /
 RUN apt-get install -y software-properties-common
 
 # CoTurn
-RUN cd / && https://github.com/svn2github/coturn.git && cd coturn && ./configure && make && make install
+RUN cd / && git clone https://github.com/svn2github/coturn.git && cd coturn && ./configure && make && make install
 COPY turnserver.conf /etc/turnserver.conf
 
 RUN cd / && git clone https://github.com/Kurento/kurento-media-server.git && cd kurento-media-server && git checkout 6.0.0 && echo "deb http://ubuntu.kurento.org trusty kms6" | sudo tee /etc/apt/sources.list.d/kurento.list && \
