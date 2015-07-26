@@ -1,0 +1,25 @@
+#commment the next line to not allow the init.d script to start kurento server
+START_DAEMON=false
+
+# Additional options that are passed to the Daemon.
+DAEMON_OPTS=""
+
+unset GST_PLUGIN_PATH
+
+#enable core dump
+ulimit -c unlimited
+#unlimit open files
+ulimit -n $((($(cat /proc/sys/fs/file-max) * 50) / 100 ))
+
+# Next line enables debug for some kurento classes it can be modified to change
+# log level and logged tags
+export GST_DEBUG=1,Kurento*:5
+
+# whom the daemons should run as
+DAEMON_USER=root
+
+DAEMON_LOG=/var/log/kurento-media-server
+
+export KURENTO_LOGS_PATH=$DAEMON_LOG
+#export KURENTO_LOG_FILE_SIZE=300
+#export KURENTO_NUMBER_LOG_FILES=20
