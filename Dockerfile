@@ -42,7 +42,7 @@ COPY turnserver.conf /etc/turnserver.conf
 RUN cd / && git clone https://github.com/Kurento/kurento-media-server.git && cd kurento-media-server && git checkout 6.0.0 && echo "deb http://ubuntu.kurento.org trusty kms6" | sudo tee /etc/apt/sources.list.d/kurento.list && \
   wget -O - http://ubuntu.kurento.org/kurento.gpg.key | apt-key add - && \
   apt-get -y update && apt-get install -y $(cat debian/control | sed -e "s/$/\!\!/g" | tr -d '\n' | sed "s/\!\! / /g" | sed "s/\!\!/\n/g" | grep "Build-Depends" | sed "s/Build-Depends: //g" | sed "s/([^)]*)//g" | sed "s/, */ /g") && \
-  mkdir build && cd build && cmake .. && make -j4 && make install && ln -s /usr/local/bin/kurento-media-server /usr/bin/kurento-media-server && mkdir /etc/kurento && mkdir /etc/kurento/modules && mkdir /etc/kurento/modules/kurento \
+  mkdir build && cd build && cmake .. && make -j4 && make install && ln -s /usr/local/bin/kurento-media-server /usr/bin/kurento-media-server && mkdir /etc/kurento/modules && mkdir /etc/kurento/modules/kurento \
   ln -s /usr/local/etc/kurento/kurento.conf.json /etc/kurento/kurento.conf.json && ln -s /usr/local/etc/kurento/sdp_pattern.txt /etc/kurento/sdp_pattern.txt
 COPY kurento-media-server-docker-6.0 /etc/default/kurento-media-server-docker-6.0
 COPY SdpEndPoint.conf /etc/kurento/modules/kurento/SdpEndpoint.conf
