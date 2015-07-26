@@ -11,6 +11,7 @@ RUN apt-get install -y cmake
 RUN apt-get install -y wget
 RUN apt-get install -y python2.7 python2.7-dev
 RUN apt-get install -y nano
+RUN apt-get install -y openssl libssl-dev
 
 RUN apt-get update && apt-get install -y openssh-server supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
