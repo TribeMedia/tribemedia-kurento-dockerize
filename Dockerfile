@@ -49,5 +49,5 @@ COPY SdpEndPoint.conf /etc/kurento/modules/kurento/SdpEndpoint.conf
 COPY WebRtcEndpoint.conf.ini /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini
 COPY MediaElement.conf.ini /etc/kurento/modules/kurento/MediaElement.conf.ini
 COPY HttpEndpoint.conf.ini /etc/kurento/modules/kurento/HttpEndpoint.conf.ini
-EXPOSE 22 3000 8888 65503-65535/udp
+EXPOSE 22 3000 8888 65504-65535/udp
 CMD ["/usr/bin/supervisord"]
