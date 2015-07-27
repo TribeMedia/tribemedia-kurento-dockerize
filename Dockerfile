@@ -24,9 +24,8 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
-
-RUN echo 'export LANG=C' >> /etc/profile \
- && echo 'export LC_ALL=C' >> /etc/profile
+RUN locale-gen en_US en_US.UTF-8
+RUN dpkg-reconfigure locales
 
 RUN echo $PATH
 RUN /usr/bin/python --version
