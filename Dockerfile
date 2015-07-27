@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:15.10
 MAINTAINER Travis James <travis@tribemedia.io>
 
 RUN apt-get -y update
