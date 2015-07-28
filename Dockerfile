@@ -12,6 +12,7 @@ RUN apt-get install -y wget
 RUN apt-get install -y python2.7 python2.7-dev
 RUN apt-get install -y nano
 RUN apt-get install -y openssl libssl-dev libevent-dev
+RUN apt-get install -y curl
 
 RUN apt-get update && apt-get install -y openssh-server supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -37,6 +38,9 @@ RUN apt-get install -y software-properties-common
 # CoTurn
 RUN cd / && git clone https://github.com/svn2github/coturn.git && cd coturn && ./configure && make && make install
 COPY turnserver.conf /etc/turnserver.conf
+COPY transform/go.js /transform/go.js
+COPY transform/WebRtcEndpoint.tmpl /transform/WebRtcEndpoint.tmpl
+COPY transform/package.json /transform/package.json
 
 RUN cd / && git clone https://github.com/Kurento/kurento-media-server.git && cd kurento-media-server && git checkout master && echo "deb http://ubuntu.kurento.org trusty kms6" | tee /etc/apt/sources.list.d/kurento.list && \
   wget -O - http://ubuntu.kurento.org/kurento.gpg.key | apt-key add - && \
@@ -44,8 +48,6 @@ RUN cd / && git clone https://github.com/Kurento/kurento-media-server.git && cd 
   mkdir build && cd build && cmake .. && make -j4 && make install && ln -s /usr/local/bin/kurento-media-server /usr/bin/kurento-media-server && \
   ln -s /usr/local/etc/kurento/kurento.conf.json /etc/kurento/kurento.conf.json && ln -s /usr/local/etc/kurento/sdp_pattern.txt /etc/kurento/sdp_pattern.txt
 COPY kurento-media-server-docker-6.0 /etc/default/kurento-media-server-docker-6.0
-COPY SdpEndPoint.conf /etc/kurento/modules/kurento/SdpEndpoint.conf
-COPY WebRtcEndpoint.conf.ini /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini
 COPY MediaElement.conf.ini /etc/kurento/modules/kurento/MediaElement.conf.ini
 COPY HttpEndpoint.conf.ini /etc/kurento/modules/kurento/HttpEndpoint.conf.ini
 EXPOSE 22 3000 8888 65505-65535/udp 3478/udp 3478
