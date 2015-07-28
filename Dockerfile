@@ -37,9 +37,10 @@ RUN apt-get install -y software-properties-common
 
 # CoTurn
 RUN cd / && git clone https://github.com/svn2github/coturn.git && cd coturn && ./configure && make && make install
-COPY turnserver.conf /etc/turnserver.conf
 COPY transform/go.js /transform/go.js
+COPY transform/goturn.js /transform/goturn.js
 COPY transform/WebRtcEndpoint.tmpl /transform/WebRtcEndpoint.tmpl
+COPY transform/turnserver.tmpl /transform/turnserver.tmpl
 COPY transform/package.json /transform/package.json
 
 RUN cd / && git clone https://github.com/Kurento/kurento-media-server.git && cd kurento-media-server && git checkout master && echo "deb http://ubuntu.kurento.org trusty kms6" | tee /etc/apt/sources.list.d/kurento.list && \
