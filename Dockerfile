@@ -37,11 +37,6 @@ RUN apt-get install -y software-properties-common
 
 # CoTurn
 RUN cd / && git clone https://github.com/svn2github/coturn.git && cd coturn && ./configure && make && make install
-COPY transform/go.js /transform/go.js
-COPY transform/goturn.js /transform/goturn.js
-COPY transform/WebRtcEndpoint.tmpl /transform/WebRtcEndpoint.tmpl
-COPY transform/turnserver.tmpl /transform/turnserver.tmpl
-COPY transform/package.json /transform/package.json
 
 # Node stuff
 RUN npm install -g bower
@@ -56,5 +51,13 @@ RUN cd / && git clone https://github.com/Kurento/kurento-media-server.git && cd 
 COPY kurento-media-server-docker-6.0 /etc/default/kurento-media-server-docker-6.0
 COPY MediaElement.conf.ini /etc/kurento/modules/kurento/MediaElement.conf.ini
 COPY HttpEndpoint.conf.ini /etc/kurento/modules/kurento/HttpEndpoint.conf.ini
+
+COPY transform/go.js /transform/go.js
+COPY transform/goturn.js /transform/goturn.js
+COPY transform/WebRtcEndpoint.tmpl /transform/WebRtcEndpoint.tmpl
+COPY transform/turnserver.tmpl /transform/turnserver.tmpl
+COPY transform/package.json /transform/package.json
+RUN export EXTERNAL_IP=$(curl -s http://whatismyip.akamai.com/) && export LOCAL_IP=$(/sbin/ifconfig eth0|grep inet|head -1|sed 's/\:/ /'|awk '{print $3}') && cd /transform && npm install && node goturn.js && node go.js
+
 EXPOSE 22 3000 8888 65505-65535/udp 3478/udp 3478
 CMD ["/usr/bin/supervisord"]
