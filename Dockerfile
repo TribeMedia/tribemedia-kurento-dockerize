@@ -14,6 +14,10 @@ RUN apt-get install -y nano
 RUN apt-get install -y openssl libssl-dev libevent-dev
 RUN apt-get install -y curl
 
+RUN locale-gen en_US en_US.UTF-8
+RUN dpkg-reconfigure locales
+ENV LANG en_US.utf8
+
 RUN apt-get update && apt-get install -y openssh-server supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN mkdir /var/run/sshd
@@ -25,11 +29,8 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
-RUN locale-gen en_US en_US.UTF-8
-RUN dpkg-reconfigure locales
 
-RUN echo $PATH
-RUN /usr/bin/python --version
+
 RUN export PATH=$PATH:/usr/bin && git clone https://github.com/joyent/node.git /node && cd /node && git checkout tags/v0.12.7 && ./configure && CXX="g++ -Wno-unused-local-typedefs" make && CXX="g++ -Wno-unused-local-typedefs" make install && \
   npm install -g npm && \
   printf '\n# Node.js\nexport PATH="node_modules/.bin:/usr/local/bin:$PATH"' >> /root/.bashrc
@@ -42,6 +43,8 @@ RUN cd / && git clone https://github.com/svn2github/coturn.git && cd coturn && .
 RUN npm install -g bower
 RUN echo "{allow_root:true}" >> /root/.bowerrc
 RUN npm install sails@git://github.com/balderdashy/sails.git -g
+
+RUN mkdir /docker-entrypoint-init-kurento.d
 
 RUN cd / && git clone https://github.com/Kurento/kurento-media-server.git && cd kurento-media-server && git checkout master && echo "deb http://ubuntu.kurento.org trusty kms6" | tee /etc/apt/sources.list.d/kurento.list && \
   wget -O - http://ubuntu.kurento.org/kurento.gpg.key | apt-key add - && \
@@ -57,7 +60,13 @@ COPY transform/goturn.js /transform/goturn.js
 COPY transform/WebRtcEndpoint.tmpl /transform/WebRtcEndpoint.tmpl
 COPY transform/turnserver.tmpl /transform/turnserver.tmpl
 COPY transform/package.json /transform/package.json
-RUN export EXTERNAL_IP=$(curl -s http://whatismyip.akamai.com/) && export LOCAL_IP=$(/sbin/ifconfig eth0|grep inet|head -1|sed 's/\:/ /'|awk '{print $3}') && cd /transform && npm install && node goturn.js && node go.js
+
+ENV KURENTO_DATA /var/lib/kurento/data
+VOLUME /var/lib/kurento/data
+
+COPY docker-entrypoint.sh /
+ENTRYPOINT["/docker-entrypoint.sh"]
 
 EXPOSE 22 3000 8888 65505-65535/udp 3478/udp 3478
+
 CMD ["/usr/bin/supervisord"]
