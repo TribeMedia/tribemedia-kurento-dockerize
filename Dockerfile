@@ -44,9 +44,7 @@ RUN npm install -g bower
 RUN echo "{allow_root:true}" >> /root/.bowerrc
 RUN npm install sails@git://github.com/balderdashy/sails.git -g
 
-RUN mkdir /docker-entrypoint-init-kurento.d
-
-RUN cd / && git clone https://github.com/Kurento/kurento-media-server.git && cd kurento-media-server && git checkout master && echo "deb http://ubuntu.kurento.org trusty kms6" | tee /etc/apt/sources.list.d/kurento.list && \
+RUN cd / && git clone https://github.com/Kurento/kurento-media-server.git && cd kurento-media-server && git checkout 6.0.0 && echo "deb http://ubuntu.kurento.org trusty kms6" | tee /etc/apt/sources.list.d/kurento.list && \
   wget -O - http://ubuntu.kurento.org/kurento.gpg.key | apt-key add - && \
   apt-get -y update && apt-get install -y $(cat debian/control | sed -e "s/$/\!\!/g" | tr -d '\n' | sed "s/\!\! / /g" | sed "s/\!\!/\n/g" | grep "Build-Depends" | sed "s/Build-Depends: //g" | sed "s/([^)]*)//g" | sed "s/, */ /g") && \
   mkdir build && cd build && cmake .. && make -j4 && make install && ln -s /usr/local/bin/kurento-media-server /usr/bin/kurento-media-server && \
@@ -60,6 +58,8 @@ COPY transform/goturn.js /transform/goturn.js
 COPY transform/WebRtcEndpoint.tmpl /transform/WebRtcEndpoint.tmpl
 COPY transform/turnserver.tmpl /transform/turnserver.tmpl
 COPY transform/package.json /transform/package.json
+
+RUN mkdir /docker-entrypoint-init-kurento.d
 
 ENV KURENTO_DATA /var/lib/kurento/data
 VOLUME /var/lib/kurento/data
