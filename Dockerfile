@@ -69,4 +69,5 @@ VOLUME /var/lib/kurento/data
 
 EXPOSE 22 3000 8888 49152-65535/udp 3478/udp 3478
 
-CMD ["/start.sh"]
+ENTRYPOINT ["/start.sh"]
+CMD ["supervisord"]

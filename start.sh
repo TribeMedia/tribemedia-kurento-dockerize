@@ -24,4 +24,6 @@ for f in /docker-entrypoint-init-kurento.d/*; do
 	echo
 done
 
-/usr/bin/supervisord
+PATH=$PATH:/usr/bin
+
+exec "$@"
