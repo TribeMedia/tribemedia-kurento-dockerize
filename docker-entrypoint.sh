@@ -12,12 +12,13 @@ node go.js
 
 mkdir -p "$KURENTO_DATA"
 cd /docker-entrypoint-init-kurento.d
+npm install
 
 echo
 for f in /docker-entrypoint-init-kurento.d/*; do
 	case "$f" in
 		*.sh)  echo "$0: running $f"; . "$f" ;;
-		*.js) echo "$0: running $f"; npm install; node < "$f" && echo ;;
+		*.js) echo "$0: running $f"; node "$f" && echo ;;
 		*)     echo "$0: ignoring $f" ;;
 	esac
 	echo
