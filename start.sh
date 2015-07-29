@@ -2,13 +2,16 @@
 
 set -e
 
-EXTERNAL_IP=$(curl -s http://whatismyip.akamai.com/)
-LOCAL_IP=$(/sbin/ifconfig eth0|grep inet|head -1|sed 's/\:/ /'|awk '{print $3}')
+export EXTERNAL_IP=$(curl -s http://whatismyip.akamai.com/)
+export LOCAL_IP=$(/sbin/ifconfig eth0|grep inet|head -1|sed 's/\:/ /'|awk '{print $3}')
+
+echo $EXTERNAL_IP
+echo $LOCAL_IP
 
 cd /transform
 npm install
-node goturn.js
-node go.js
+EXTERNAL_IP=$EXTERNAL_IP LOCAL_IP=$LOCAL_IP node goturn.js
+EXTERNAL_IP=$EXTERNAL_IP node go.js
 
 # mkdir -p "$KURENTO_DATA"
 # cd /docker-entrypoint-init-kurento.d
