@@ -65,8 +65,6 @@ RUN mkdir /docker-entrypoint-init-kurento.d
 ENV KURENTO_DATA /var/lib/kurento/data
 VOLUME /var/lib/kurento/data
 
-ENTRYPOINT["/docker-entrypoint.sh"]
-
 EXPOSE 22 3000 8888 65505-65535/udp 3478/udp 3478
 
-CMD ["/usr/bin/supervisord"]
+ENTRYPOINT["/docker-entrypoint.sh"]

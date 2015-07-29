@@ -23,3 +23,5 @@ for f in /docker-entrypoint-init-kurento.d/*; do
 	esac
 	echo
 done
+
+/usr/bin/supervisord
