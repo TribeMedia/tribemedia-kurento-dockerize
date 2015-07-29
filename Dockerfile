@@ -20,7 +20,7 @@ ENV LANG en_US.utf8
 
 RUN apt-get update && apt-get install -y openssh-server supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY docker-entrypoint.sh /docker-entrypoint.sh
+COPY start.sh start.sh
 RUN mkdir /var/run/sshd
 RUN echo 'root:tribemedia' | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
@@ -67,4 +67,4 @@ VOLUME /var/lib/kurento/data
 
 EXPOSE 22 3000 8888 65505-65535/udp 3478/udp 3478
 
-ENTRYPOINT["/docker-entrypoint.sh"]
+CMD["/start.sh"]
