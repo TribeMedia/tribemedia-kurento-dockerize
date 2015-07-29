@@ -11,6 +11,7 @@ node goturn.js
 node go.js
 
 mkdir -p "$KURENTO_DATA"
+cd /docker-entrypoint-init-kurento.d
 
 echo
 for f in /docker-entrypoint-init-kurento.d/*; do
