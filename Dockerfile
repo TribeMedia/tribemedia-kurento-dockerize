@@ -31,7 +31,6 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
-
 RUN export PATH=$PATH:/usr/bin && git clone https://github.com/joyent/node.git /node && cd /node && git checkout tags/v0.12.7 && ./configure && CXX="g++ -Wno-unused-local-typedefs" make && CXX="g++ -Wno-unused-local-typedefs" make install && \
   npm install -g npm && \
   printf '\n# Node.js\nexport PATH="node_modules/.bin:/usr/local/bin:$PATH"' >> /root/.bashrc
@@ -43,7 +42,6 @@ RUN cd / && git clone https://github.com/svn2github/coturn.git && cd coturn && .
 # Node stuff
 RUN npm install -g bower
 RUN echo "{allow_root:true}" >> /root/.bowerrc
-RUN npm install sails@git://github.com/balderdashy/sails.git -g
 
 RUN cd / && git clone https://github.com/Kurento/kurento-media-server.git && cd kurento-media-server && git checkout 6.0.0 && echo "deb http://ubuntu.kurento.org trusty kms6" | tee /etc/apt/sources.list.d/kurento.list && \
   wget -O - http://ubuntu.kurento.org/kurento.gpg.key | apt-key add - && \
@@ -61,6 +59,10 @@ COPY transform/turnserver.tmpl /transform/turnserver.tmpl
 COPY transform/package.json /transform/package.json
 
 RUN mkdir /docker-entrypoint-init-kurento.d
+
+RUN rm -rf /kurento-media-server
+RUN rm -rf /node
+RUN rm -rf /coturn
 
 ENV KURENTO_DATA /var/lib/kurento/data
 VOLUME /var/lib/kurento/data
