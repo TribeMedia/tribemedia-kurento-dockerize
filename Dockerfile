@@ -68,7 +68,7 @@ RUN rm -rf /coturn
 ENV KURENTO_DATA /var/lib/kurento/data
 VOLUME /var/lib/kurento/data
 
-EXPOSE 22 3000 8888 49152-65535/udp 3478/udp 3478
+EXPOSE 22 3000 8888 8080 49152-65535/udp 3478/udp 3478
 
 ENTRYPOINT ["/start.sh"]
-CMD ["supervisord"]
+CMD ["/usr/bin/supervisord"]

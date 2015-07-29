@@ -27,6 +27,4 @@ EXTERNAL_IP=$EXTERNAL_IP node go.js
 # 	echo
 # done
 
-PATH=$PATH:/usr/bin
-
 exec "$@"
