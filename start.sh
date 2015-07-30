@@ -2,15 +2,13 @@
 
 set -e
 
-export EXTERNAL_IP=$(curl -s http://whatismyip.akamai.com/)
-export LOCAL_IP=$(/sbin/ifconfig eth0|grep inet|head -1|sed 's/\:/ /'|awk '{print $3}')
+export EXTERNAL_IP=$(curl -4 icanhazip.com)
 
 echo $EXTERNAL_IP
-echo $LOCAL_IP
 
 cd /transform
 npm install
-EXTERNAL_IP=$EXTERNAL_IP LOCAL_IP=$LOCAL_IP node goturn.js
+EXTERNAL_IP=$EXTERNAL_IP node goturn.js
 EXTERNAL_IP=$EXTERNAL_IP node go.js
 
 # mkdir -p "$KURENTO_DATA"

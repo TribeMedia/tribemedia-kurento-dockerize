@@ -15,7 +15,7 @@
 # Note: actually, TLS & DTLS sessions can connect to the 
 # "plain" TCP & UDP port(s), too - if allowed by configuration.
 #
-#listening-port=3478
+listening-port=3478
 
 # TURN listener port for TLS (Default: 5349).
 # Note: actually, "plain" TCP & UDP sessions can connect to the TLS & DTLS
@@ -52,6 +52,7 @@
 #listening-ip=172.17.19.101
 #listening-ip=10.207.21.238
 #listening-ip=2607:f0d0:1002:51::4
+listening-ip={{EXTERNAL_IP}}
 
 # Auxiliary STUN/TURN server listening endpoint.
 # Aux servers have almost full TURN and STUN functionality.
@@ -123,7 +124,7 @@
 #
 #external-ip=60.70.80.91/172.17.19.101
 #external-ip=60.70.80.92/172.17.19.102
-external-ip={{EXTERNAL_IP}}/{{INTERNAL_IP}}
+external-ip={{EXTERNAL_IP}}
 
 
 # Number of the relay threads to handle the established connections
@@ -553,7 +554,7 @@ log-file=/var/log/turn.log
 # Default is /var/run/turnserver.pid (if superuser account is used) or
 # /var/tmp/turnserver.pid .
 #
-#pidfile="/var/run/turnserver.pid"
+pidfile="/var/run/turnserver.pid"
 
 # Require authentication of the STUN Binding request.
 # By default, the clients are allowed anonymous access to the STUN Binding functionality.

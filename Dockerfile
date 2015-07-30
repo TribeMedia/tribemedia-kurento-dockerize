@@ -42,7 +42,7 @@ RUN cd / && git clone https://github.com/svn2github/coturn.git && cd coturn && .
 
 # Node stuff
 RUN npm install -g bower
-RUN echo "{allow_root:true}" >> /root/.bowerrc
+RUN echo "{\"allow_root\":true}" >> /root/.bowerrc
 
 RUN cd / && git clone https://github.com/Kurento/kurento-media-server.git && cd kurento-media-server && git checkout 6.0.0 && echo "deb http://ubuntu.kurento.org trusty kms6" | tee /etc/apt/sources.list.d/kurento.list && \
   wget -O - http://ubuntu.kurento.org/kurento.gpg.key | apt-key add - && \
