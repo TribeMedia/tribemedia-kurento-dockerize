@@ -45,12 +45,11 @@ RUN npm install -g bower
 
 RUN echo "{\"allow_root\":true}" >> /root/.bowerrc
 
-RUN cd / && git clone https://github.com/Kurento/kurento-media-server.git && cd kurento-media-server && git checkout 6.0.0 && echo "deb http://ubuntu.kurento.org trusty kms6" | tee /etc/apt/sources.list.d/kurento.list && \
+RUN "deb http://ubuntu.kurento.org trusty kms6" | tee /etc/apt/sources.list.d/kurento.list && \
   wget -O - http://ubuntu.kurento.org/kurento.gpg.key | apt-key add - && \
-  apt-get -y update && apt-get install -y $(cat debian/control | sed -e "s/$/\!\!/g" | tr -d '\n' | sed "s/\!\! / /g" | sed "s/\!\!/\n/g" | grep "Build-Depends" | sed "s/Build-Depends: //g" | sed "s/([^)]*)//g" | sed "s/, */ /g") && \
-  mkdir build && cd build && cmake .. && make -j4 && make install && ln -s /usr/local/bin/kurento-media-server /usr/bin/kurento-media-server && \
-  ln -s /usr/local/etc/kurento/kurento.conf.json /etc/kurento/kurento.conf.json && ln -s /usr/local/etc/kurento/sdp_pattern.txt /etc/kurento/sdp_pattern.txt
-COPY kurento-media-server-docker-6.0 /etc/default/kurento-media-server-docker-6.0
+  apt-get -y update && apt-get install kurento-server
+RUN rm /etc/kurento/modules/kurento/MediaElement.conf.ini && rm /etc/kurento/modules/kurento/HttpEndpoint.conf.ini && \
+  rm /etc/kurento/modules/kurento/WebRtcEnpoint.ini
 COPY MediaElement.conf.ini /etc/kurento/modules/kurento/MediaElement.conf.ini
 COPY HttpEndpoint.conf.ini /etc/kurento/modules/kurento/HttpEndpoint.conf.ini
 
@@ -60,9 +59,10 @@ COPY transform/WebRtcEndpoint.tmpl /transform/WebRtcEndpoint.tmpl
 COPY transform/turnserver.tmpl /transform/turnserver.tmpl
 COPY transform/package.json /transform/package.json
 
+RUN service kurento-media-server-6.0 restart
+
 RUN mkdir /docker-entrypoint-init-kurento.d
 
-RUN rm -rf /kurento-media-server
 RUN rm -rf /node
 RUN rm -rf /coturn
 
