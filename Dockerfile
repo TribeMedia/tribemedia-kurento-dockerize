@@ -59,8 +59,6 @@ COPY transform/WebRtcEndpoint.tmpl /transform/WebRtcEndpoint.tmpl
 COPY transform/turnserver.tmpl /transform/turnserver.tmpl
 COPY transform/package.json /transform/package.json
 
-RUN service kurento-media-server-6.0 restart
-
 RUN mkdir /docker-entrypoint-init-kurento.d
 
 RUN rm -rf /node
