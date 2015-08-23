@@ -45,9 +45,9 @@ RUN npm install -g bower
 
 RUN echo "{\"allow_root\":true}" >> /root/.bowerrc
 
-RUN "deb http://ubuntu.kurento.org trusty kms6" | tee /etc/apt/sources.list.d/kurento-dev.list && \
-  wget -O - http://ubuntu.kurento.org/kurento.gpg.key | apt-key add - && \
-  apt-get -y update && apt-get install kurento-media-server-6.0
+RUN "deb http://ubuntu.kurento.org trusty kms6" | tee /etc/apt/sources.list.d/kurento.list && \
+  wget -O - http://ubuntu.kurento.org/kurento.gpg.key | sudo apt-key add - && \
+  apt-get -y update && apt-get install kurento-server
 RUN rm /etc/kurento/modules/kurento/MediaElement.conf.ini && rm /etc/kurento/modules/kurento/HttpEndpoint.conf.ini && \
   rm /etc/kurento/modules/kurento/WebRtcEnpoint.ini
 COPY MediaElement.conf.ini /etc/kurento/modules/kurento/MediaElement.conf.ini
